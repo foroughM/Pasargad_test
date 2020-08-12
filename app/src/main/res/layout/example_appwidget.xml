@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/widget_margin">
+
+    <LinearLayout
+        android:id="@+id/widget_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="@color/widget_color"
+        android:padding="@dimen/widget_padding">
+
+        <TextView
+            android:id="@+id/song_info"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:text="@string/app_name"/>
+
+        <ImageView
+            android:id="@+id/play_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_play_arrow_black_24dp"/>
+
+    </LinearLayout>
+
+</FrameLayout>
