@@ -38,6 +38,8 @@
                 android:resource="@xml/example_appwidget_info" />
         </receiver>
 
+        <service android:name=".service.MusicPlayerService" />
+
     </application>
 
 </manifest>

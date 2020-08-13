@@ -3,11 +3,14 @@ package com.example.kotlin_first.view.activity
 import android.Manifest
 import android.app.Activity
 import android.appwidget.AppWidgetManager.*
+import android.content.ComponentName
 import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Button
@@ -15,6 +18,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import com.example.kotlin_first.R
 import com.example.kotlin_first.data.model.Music
+import com.example.kotlin_first.service.MusicPlayerService
 import com.example.kotlin_first.view.widget.ExampleAppWidgetProvider
 import kotlin.random.Random
 
@@ -28,7 +32,6 @@ class ExampleAppWidgetConfigure : Activity(), View.OnClickListener {
         val resultVal = Intent()
         resultVal.putExtra(EXTRA_APPWIDGET_ID, appWidgetId)
         setResult(RESULT_OK, resultVal)
-        finish()
     }
 
     var appWidgetId: Int = INVALID_APPWIDGET_ID
@@ -63,23 +66,22 @@ class ExampleAppWidgetConfigure : Activity(), View.OnClickListener {
                 musicCursor.getColumnIndex(MediaStore.Audio.Media.DURATION)
             do {
                 musicList.add(
-                    Music(
-                        musicCursor.getInt(idColumn),
-                        musicCursor.getString(titleColumn),
-                        musicCursor.getString(artistColumn),
-                        musicCursor.getString(albumColumn),
-                        musicCursor.getString(durationColumn),
-                        Uri.withAppendedPath(musicUri, "" + musicCursor.getInt(idColumn))
-                    )
-                )
+                    Music().apply {
+                        songId = musicCursor.getInt(idColumn)
+                        title = musicCursor.getString(titleColumn)
+                        artist = musicCursor.getString(artistColumn)
+                        album = musicCursor.getString(albumColumn)
+                        duration = musicCursor.getString(durationColumn)
+                        path = Uri.withAppendedPath(musicUri, "" + musicCursor.getInt(idColumn))
+                    })
             } while (musicCursor.moveToNext())
             musicCursor.close()
             val random = Random(2)
             val music = musicList.get(random.nextInt(musicList.size - 1))
             ExampleAppWidgetProvider.updateWidget(this, getInstance(this), appWidgetId, music)
+            finish();
         }
     }
-
 
     private fun checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
