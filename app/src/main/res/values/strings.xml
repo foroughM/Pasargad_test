@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">kotlin_first</string>
+    <string name="app_name">media_player</string>
     <string name="config_txt">This widget play random music</string>
     <string name="save">تایید</string>
     <string name="need_permission">برای اجرای این ویجت نیاز به دسترسی به مدیا است</string>

@@ -8,7 +8,7 @@ class Music : Serializable {
     var title: String? = null
     var artist: String? = null
     var album: String? = null
-    var duration: String? = null
+    var duration: Long? = null
     var path: Uri? = null
 
     fun getInfo(): String {

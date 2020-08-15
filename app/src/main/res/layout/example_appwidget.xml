@@ -8,23 +8,45 @@
         android:id="@+id/widget_holder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
         android:background="@color/widget_color"
+        android:orientation="horizontal"
         android:padding="@dimen/widget_padding">
 
-        <TextView
-            android:id="@+id/song_info"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="4"
-            android:text="@string/app_name"/>
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/song_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:padding="@dimen/widget_padding"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="@string/app_name" />
+
+            <TextView
+                android:id="@+id/progress_info"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@color/widget_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/widget_padding" />
+
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/play_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/ic_play_arrow_black_24dp"/>
+            android:src="@drawable/ic_play_arrow_black_24dp" />
 
     </LinearLayout>
 

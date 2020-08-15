@@ -9,6 +9,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
+import com.example.kotlin_first.utils.completedPlayerAction
+import com.example.kotlin_first.utils.initMusicAction
+import com.example.kotlin_first.utils.initMusicExtra
+import com.example.kotlin_first.utils.playPauseAction
 import com.example.kotlin_first.view.widget.ExampleAppWidgetProvider
 
 class MusicPlayerService : Service(),
@@ -16,17 +20,21 @@ class MusicPlayerService : Service(),
     MediaPlayer.OnErrorListener,
     MediaPlayer.OnCompletionListener {
 
-    private val mediaPlayer: MediaPlayer = MediaPlayer()
+    private var finishIntent: Intent? = null
     private lateinit var musicPath: Uri
 
     override fun onCreate() {
+        finishIntent =
+            Intent(applicationContext, ExampleAppWidgetProvider::class.java).apply {
+                action = completedPlayerAction
+            }
         initMediaPlayer()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent?.action.equals(ExampleAppWidgetProvider.initMusicAction))
-            musicPath = intent?.extras?.get(ExampleAppWidgetProvider.initMusicExtra) as Uri
-        else if (intent?.action.equals(ExampleAppWidgetProvider.playPauseAction))
+        if (intent?.action.equals(initMusicAction))
+            musicPath = intent?.extras?.get(initMusicExtra) as Uri
+        else if (intent?.action.equals(playPauseAction))
             if (mediaPlayer.isPlaying) {
                 pauseMusic()
             } else {
@@ -60,24 +68,34 @@ class MusicPlayerService : Service(),
 
     fun pauseMusic() {
         mediaPlayer.pause()
+        length = mediaPlayer.currentPosition
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
+        mp?.seekTo(length)
         mp?.start()
     }
 
     override fun onError(mp: MediaPlayer?, what: Int, extra: Int): Boolean {
-        TODO("Not yet implemented")
+        return false
     }
 
     override fun onCompletion(mp: MediaPlayer?) {
-        TODO("Not yet implemented")
+        length = 0
+        sendBroadcast(finishIntent)
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
         mediaPlayer.stop()
         mediaPlayer.release()
+        stopService(finishIntent)
         return false
+    }
+
+    companion object {
+        val mediaPlayer: MediaPlayer = MediaPlayer()
+        var length = 0
+        fun isPlaying() = mediaPlayer.isPlaying
     }
 
 }
