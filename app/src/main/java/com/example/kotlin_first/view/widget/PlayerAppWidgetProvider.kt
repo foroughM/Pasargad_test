@@ -15,15 +15,15 @@ import com.example.kotlin_first.utils.*
 
 class PlayerAppWidgetProvider : AppWidgetProvider() {
 
+    override fun onEnabled(context: Context?) {
+        updateIntent = Intent(context, UpdateProgressService::class.java)
+        super.onEnabled(context)
+    }
+
     override fun onDisabled(context: Context?) {
         context?.stopService(playerServiceIntent)
         context?.stopService(updateIntent)
         super.onDisabled(context)
-    }
-
-    override fun onEnabled(context: Context?) {
-        updateIntent = Intent(context, UpdateProgressService::class.java)
-        super.onEnabled(context)
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
