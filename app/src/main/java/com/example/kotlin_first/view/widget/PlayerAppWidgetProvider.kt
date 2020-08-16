@@ -30,26 +30,34 @@ class PlayerAppWidgetProvider : AppWidgetProvider() {
         if (intent?.action.equals(PLAY_PAUSE_ACTION)) {
             appWidgetId = intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID)
             updateView(context, appWidgetId, MusicPlayerService.isPlaying())
-            updateIntent?.apply {
-                putExtra(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    appWidgetId
-                )
-                putExtra(MUSIC_DURATION_EXTRA, music.duration)
-            }
-            updateIntent?.action = if (MusicPlayerService.isPlaying())
-                CANCEL_PROGRESS_ACTION
-            else
-                UPDATE_PROGRESS_ACTION
-            context?.startService(updateIntent)
-            Intent(context, MusicPlayerService::class.java).apply {
-                this.action = PLAY_PAUSE_ACTION
-                context?.startService(this)
-            }
+            updatePlayerProgress(context)
+            intentToPlayer(context)
         } else if (intent?.action.equals(COMPLETE_PLAYER_ACTION)) {
             updateView(context, appWidgetId, true)
         }
         super.onReceive(context, intent)
+    }
+
+    private fun intentToPlayer(context: Context?) {
+        Intent(context, MusicPlayerService::class.java).apply {
+            this.action = PLAY_PAUSE_ACTION
+            context?.startService(this)
+        }
+    }
+
+    private fun updatePlayerProgress(context: Context?) {
+        updateIntent?.apply {
+            putExtra(
+                AppWidgetManager.EXTRA_APPWIDGET_ID,
+                appWidgetId
+            )
+            putExtra(MUSIC_DURATION_EXTRA, music.duration)
+        }
+        updateIntent?.action = if (MusicPlayerService.isPlaying())
+            CANCEL_PROGRESS_ACTION
+        else
+            UPDATE_PROGRESS_ACTION
+        context?.startService(updateIntent)
     }
 
     private fun updateView(
