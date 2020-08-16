@@ -1,0 +1,10 @@
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:configure="com.example.kotlin_first.view.activity.PlayerAppWidgetConfigure"
+    android:initialLayout="@layout/player_appwidget"
+    android:minWidth="@dimen/widget_minwidth"
+    android:minHeight="@dimen/widget_minheight"
+    android:previewImage="@drawable/widgetimage"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen">
+
+</appwidget-provider>

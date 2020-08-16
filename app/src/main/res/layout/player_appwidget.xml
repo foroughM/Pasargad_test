@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="@dimen/widget_margin">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/widget_holder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/widget_color"
         android:orientation="horizontal"
         android:padding="@dimen/widget_padding">
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="4"
             android:orientation="vertical">
 
@@ -24,6 +23,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
                 android:focusable="true"
+                android:textColor="@color/text_color"
                 android:focusableInTouchMode="true"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:padding="@dimen/widget_padding"
@@ -33,20 +33,20 @@
 
             <TextView
                 android:id="@+id/progress_info"
-                android:background="@color/colorPrimaryDark"
-                android:textColor="@color/widget_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/widget_padding" />
+                android:padding="@dimen/widget_padding"
+                android:text="@string/default_timer"/>
 
         </LinearLayout>
 
         <ImageView
             android:id="@+id/play_btn"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:src="@drawable/ic_play_arrow_black_24dp" />
+            android:layout_width="@dimen/play_btn_size"
+            android:layout_height="@dimen/play_btn_size"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_play_arrow_black_24dp"
+            android:padding="@dimen/widget_padding"/>
 
     </LinearLayout>
 

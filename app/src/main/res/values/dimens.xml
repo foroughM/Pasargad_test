@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="widget_margin">4dp</dimen>
+    <dimen name="widget_top_bottom_margin">8dp</dimen>
     <dimen name="widget_padding">4dp</dimen>
     <dimen name="line_extra">4dp</dimen>
+    <dimen name="widget_minwidth">216dp</dimen>
+    <dimen name="widget_minheight">48dp</dimen>
+    <dimen name="play_btn_size">30dp</dimen>
 </resources>

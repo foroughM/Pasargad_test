@@ -14,10 +14,10 @@ import androidx.core.app.ActivityCompat
 import com.example.kotlin_first.R
 import com.example.kotlin_first.interfaces.RandomMusicLoader
 import com.example.kotlin_first.utils.MUSIC_RANDOM_SEED
-import com.example.kotlin_first.view.widget.ExampleAppWidgetProvider
+import com.example.kotlin_first.view.widget.PlayerAppWidgetProvider
 
 
-class ExampleAppWidgetConfigure : Activity(), View.OnClickListener {
+class PlayerAppWidgetConfigure : Activity(), View.OnClickListener {
 
     private val MY_PERMISSION_REQUEST_CODE = 100
 
@@ -45,7 +45,7 @@ class ExampleAppWidgetConfigure : Activity(), View.OnClickListener {
 
     private fun getMusicList() {
         val musicLoader = RandomMusicLoader
-        ExampleAppWidgetProvider.updateWidget(
+        PlayerAppWidgetProvider.updateWidget(
             this, getInstance(this), appWidgetId,
             musicLoader.getRandomMusic(contentResolver, MUSIC_RANDOM_SEED)
         )

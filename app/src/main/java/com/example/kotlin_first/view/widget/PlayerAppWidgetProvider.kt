@@ -13,7 +13,7 @@ import com.example.kotlin_first.service.UpdateProgressService
 import com.example.kotlin_first.utils.*
 
 
-class ExampleAppWidgetProvider : AppWidgetProvider() {
+class PlayerAppWidgetProvider : AppWidgetProvider() {
 
     override fun onDisabled(context: Context?) {
         context?.stopService(playerServiceIntent)
@@ -21,19 +21,22 @@ class ExampleAppWidgetProvider : AppWidgetProvider() {
         super.onDisabled(context)
     }
 
+    override fun onEnabled(context: Context?) {
+        updateIntent = Intent(context, UpdateProgressService::class.java)
+        super.onEnabled(context)
+    }
+
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action.equals(PLAY_PAUSE_ACTION)) {
             appWidgetId = intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID)
             updateView(context, appWidgetId, MusicPlayerService.isPlaying())
-            if (updateIntent == null)
-                updateIntent =
-                    Intent(context, UpdateProgressService::class.java).apply {
-                        putExtra(
-                            AppWidgetManager.EXTRA_APPWIDGET_ID,
-                            appWidgetId
-                        )
-                        putExtra(MUSIC_DURATION_EXTRA, music.duration)
-                    }
+            updateIntent?.apply {
+                putExtra(
+                    AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    appWidgetId
+                )
+                putExtra(MUSIC_DURATION_EXTRA, music.duration)
+            }
             updateIntent?.action = if (MusicPlayerService.isPlaying())
                 CANCEL_PROGRESS_ACTION
             else
@@ -54,7 +57,7 @@ class ExampleAppWidgetProvider : AppWidgetProvider() {
         appWidgetId: Int?,
         showPlayBtn: Boolean
     ) {
-        val views = RemoteViews(context?.packageName, R.layout.example_appwidget).apply {
+        val views = RemoteViews(context?.packageName, R.layout.player_appwidget).apply {
             setImageViewResource(
                 R.id.play_btn,
                 if (showPlayBtn) R.drawable.ic_play_arrow_black_24dp
@@ -78,9 +81,9 @@ class ExampleAppWidgetProvider : AppWidgetProvider() {
             music = randomMusic
             val views = RemoteViews(
                 context.packageName,
-                R.layout.example_appwidget
+                R.layout.player_appwidget
             ).apply {
-                val clickIntent = Intent(context, ExampleAppWidgetProvider::class.java)
+                val clickIntent = Intent(context, PlayerAppWidgetProvider::class.java)
                 clickIntent.action = PLAY_PAUSE_ACTION
                 clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                 setOnClickPendingIntent(

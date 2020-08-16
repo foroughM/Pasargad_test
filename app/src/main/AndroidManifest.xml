@@ -23,19 +23,19 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".view.activity.ExampleAppWidgetConfigure">
+        <activity android:name=".view.activity.PlayerAppWidgetConfigure">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
 
-        <receiver android:name=".view.widget.ExampleAppWidgetProvider">
+        <receiver android:name=".view.widget.PlayerAppWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/example_appwidget_info" />
+                android:resource="@xml/player_appwidget_info" />
         </receiver>
 
         <service android:name=".service.MusicPlayerService" />

@@ -13,7 +13,7 @@ import com.example.kotlin_first.utils.COMPLETE_PLAYER_ACTION
 import com.example.kotlin_first.utils.INIT_MUSIC_ACTION
 import com.example.kotlin_first.utils.INIT_MUSIC_EXTRA
 import com.example.kotlin_first.utils.PLAY_PAUSE_ACTION
-import com.example.kotlin_first.view.widget.ExampleAppWidgetProvider
+import com.example.kotlin_first.view.widget.PlayerAppWidgetProvider
 
 class MusicPlayerService : Service(),
     MediaPlayer.OnPreparedListener,
@@ -25,7 +25,7 @@ class MusicPlayerService : Service(),
 
     override fun onCreate() {
         finishIntent =
-            Intent(applicationContext, ExampleAppWidgetProvider::class.java).apply {
+            Intent(applicationContext, PlayerAppWidgetProvider::class.java).apply {
                 action = COMPLETE_PLAYER_ACTION
             }
         initMediaPlayer()
@@ -60,13 +60,13 @@ class MusicPlayerService : Service(),
         return null
     }
 
-    fun playMusic() {
+    private fun playMusic() {
         mediaPlayer.reset()
         mediaPlayer.setDataSource(applicationContext, musicPath)
         mediaPlayer.prepareAsync()
     }
 
-    fun pauseMusic() {
+    private fun pauseMusic() {
         mediaPlayer.pause()
         length = mediaPlayer.currentPosition
     }
@@ -90,6 +90,11 @@ class MusicPlayerService : Service(),
         mediaPlayer.release()
         stopService(finishIntent)
         return false
+    }
+
+    override fun onDestroy() {
+        mediaPlayer.stop()
+        super.onDestroy()
     }
 
     companion object {

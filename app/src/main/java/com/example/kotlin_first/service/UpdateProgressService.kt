@@ -59,7 +59,7 @@ class UpdateProgressService : Service() {
     private fun updateProgressWidget(min: Long?, sec: Long?, appWidgetId: Int) {
         val views = RemoteViews(
             packageName,
-            R.layout.example_appwidget
+            R.layout.player_appwidget
         ).apply {
             val formatter = DecimalFormat("00")
             setTextViewText(
