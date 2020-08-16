@@ -3,24 +3,18 @@ package com.example.kotlin_first.view.activity
 import android.Manifest
 import android.app.Activity
 import android.appwidget.AppWidgetManager.*
-import android.content.ComponentName
 import android.content.Intent
-import android.content.ServiceConnection
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.IBinder
-import android.provider.MediaStore
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import com.example.kotlin_first.R
-import com.example.kotlin_first.data.model.Music
-import com.example.kotlin_first.service.MusicPlayerService
+import com.example.kotlin_first.interfaces.RandomMusicLoader
+import com.example.kotlin_first.utils.MUSIC_RANDOM_SEED
 import com.example.kotlin_first.view.widget.ExampleAppWidgetProvider
-import kotlin.random.Random
 
 
 class ExampleAppWidgetConfigure : Activity(), View.OnClickListener {
@@ -35,7 +29,6 @@ class ExampleAppWidgetConfigure : Activity(), View.OnClickListener {
     }
 
     var appWidgetId: Int = INVALID_APPWIDGET_ID
-    var musicList = ArrayList<Music>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,36 +44,12 @@ class ExampleAppWidgetConfigure : Activity(), View.OnClickListener {
     }
 
     private fun getMusicList() {
-        val musicUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-        val musicCursor = contentResolver.query(musicUri, null, null, null, null)
-        if (musicCursor != null && musicCursor.moveToFirst()) {
-            val titleColumn =
-                musicCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
-            val idColumn =
-                musicCursor.getColumnIndex(MediaStore.Audio.Media._ID)
-            val artistColumn =
-                musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)
-            val albumColumn =
-                musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)
-            val durationColumn =
-                musicCursor.getColumnIndex(MediaStore.Audio.Media.DURATION)
-            do {
-                musicList.add(
-                    Music().apply {
-                        songId = musicCursor.getInt(idColumn)
-                        title = musicCursor.getString(titleColumn)
-                        artist = musicCursor.getString(artistColumn)
-                        album = musicCursor.getString(albumColumn)
-                        duration = musicCursor.getLong(durationColumn)
-                        path = Uri.withAppendedPath(musicUri, "" + musicCursor.getInt(idColumn))
-                    })
-            } while (musicCursor.moveToNext())
-            musicCursor.close()
-            val random = Random(11)
-            val music = musicList.get(random.nextInt(musicList.size - 1))
-            ExampleAppWidgetProvider.updateWidget(this, getInstance(this), appWidgetId, music)
-            finish();
-        }
+        val musicLoader = RandomMusicLoader
+        ExampleAppWidgetProvider.updateWidget(
+            this, getInstance(this), appWidgetId,
+            musicLoader.getRandomMusic(contentResolver, MUSIC_RANDOM_SEED)
+        )
+        finish();
     }
 
     private fun checkPermission() {

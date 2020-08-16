@@ -22,7 +22,7 @@ class ExampleAppWidgetProvider : AppWidgetProvider() {
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent?.action.equals(playPauseAction)) {
+        if (intent?.action.equals(PLAY_PAUSE_ACTION)) {
             appWidgetId = intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID)
             updateView(context, appWidgetId, MusicPlayerService.isPlaying())
             if (updateIntent == null)
@@ -32,18 +32,18 @@ class ExampleAppWidgetProvider : AppWidgetProvider() {
                             AppWidgetManager.EXTRA_APPWIDGET_ID,
                             appWidgetId
                         )
-                        putExtra(musicDurationExtra, music.duration)
+                        putExtra(MUSIC_DURATION_EXTRA, music.duration)
                     }
             updateIntent?.action = if (MusicPlayerService.isPlaying())
-                cancelProgressAction
+                CANCEL_PROGRESS_ACTION
             else
-                updateProgressAction
+                UPDATE_PROGRESS_ACTION
             context?.startService(updateIntent)
             Intent(context, MusicPlayerService::class.java).apply {
-                this.action = playPauseAction
+                this.action = PLAY_PAUSE_ACTION
                 context?.startService(this)
             }
-        } else if (intent?.action.equals(completedPlayerAction)) {
+        } else if (intent?.action.equals(COMPLETE_PLAYER_ACTION)) {
             updateView(context, appWidgetId, true)
         }
         super.onReceive(context, intent)
@@ -81,7 +81,7 @@ class ExampleAppWidgetProvider : AppWidgetProvider() {
                 R.layout.example_appwidget
             ).apply {
                 val clickIntent = Intent(context, ExampleAppWidgetProvider::class.java)
-                clickIntent.action = playPauseAction
+                clickIntent.action = PLAY_PAUSE_ACTION
                 clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                 setOnClickPendingIntent(
                     R.id.play_btn,
@@ -96,8 +96,8 @@ class ExampleAppWidgetProvider : AppWidgetProvider() {
             }
             appWidgetManager.updateAppWidget(appWidgetId, views)
             playerServiceIntent = Intent(context, MusicPlayerService::class.java).apply {
-                this.action = initMusicAction
-                this.putExtra(initMusicExtra, music.path)
+                this.action = INIT_MUSIC_ACTION
+                this.putExtra(INIT_MUSIC_EXTRA, music.path)
                 context.startService(this)
             }
         }

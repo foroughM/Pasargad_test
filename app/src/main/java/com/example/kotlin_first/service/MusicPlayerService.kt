@@ -9,10 +9,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
-import com.example.kotlin_first.utils.completedPlayerAction
-import com.example.kotlin_first.utils.initMusicAction
-import com.example.kotlin_first.utils.initMusicExtra
-import com.example.kotlin_first.utils.playPauseAction
+import com.example.kotlin_first.utils.COMPLETE_PLAYER_ACTION
+import com.example.kotlin_first.utils.INIT_MUSIC_ACTION
+import com.example.kotlin_first.utils.INIT_MUSIC_EXTRA
+import com.example.kotlin_first.utils.PLAY_PAUSE_ACTION
 import com.example.kotlin_first.view.widget.ExampleAppWidgetProvider
 
 class MusicPlayerService : Service(),
@@ -26,15 +26,15 @@ class MusicPlayerService : Service(),
     override fun onCreate() {
         finishIntent =
             Intent(applicationContext, ExampleAppWidgetProvider::class.java).apply {
-                action = completedPlayerAction
+                action = COMPLETE_PLAYER_ACTION
             }
         initMediaPlayer()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent?.action.equals(initMusicAction))
-            musicPath = intent?.extras?.get(initMusicExtra) as Uri
-        else if (intent?.action.equals(playPauseAction))
+        if (intent?.action.equals(INIT_MUSIC_ACTION))
+            musicPath = intent?.extras?.get(INIT_MUSIC_EXTRA) as Uri
+        else if (intent?.action.equals(PLAY_PAUSE_ACTION))
             if (mediaPlayer.isPlaying) {
                 pauseMusic()
             } else {
