@@ -80,6 +80,7 @@ class PlayerAppWidgetProvider : AppWidgetProvider() {
         var appWidgetId: Int? = null
         lateinit var playerServiceIntent: Intent
         var updateIntent: Intent? = null
+
         fun updateWidget(
             context: Context,
             appWidgetManager: AppWidgetManager,
@@ -91,18 +92,7 @@ class PlayerAppWidgetProvider : AppWidgetProvider() {
                 context.packageName,
                 R.layout.player_appwidget
             ).apply {
-                val clickIntent = Intent(context, PlayerAppWidgetProvider::class.java)
-                clickIntent.action = PLAY_PAUSE_ACTION
-                clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                setOnClickPendingIntent(
-                    R.id.play_btn,
-                    PendingIntent.getBroadcast(
-                        context,
-                        0,
-                        clickIntent,
-                        0
-                    )
-                )
+                setClickIntent(context, appWidgetId)
                 setTextViewText(R.id.song_info, music.getInfo())
             }
             appWidgetManager.updateAppWidget(appWidgetId, views)
@@ -111,6 +101,24 @@ class PlayerAppWidgetProvider : AppWidgetProvider() {
                 this.putExtra(INIT_MUSIC_EXTRA, music.path)
                 context.startService(this)
             }
+        }
+
+        private fun RemoteViews.setClickIntent(
+            context: Context,
+            appWidgetId: Int
+        ) {
+            val clickIntent = Intent(context, PlayerAppWidgetProvider::class.java)
+            clickIntent.action = PLAY_PAUSE_ACTION
+            clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            setOnClickPendingIntent(
+                R.id.play_btn,
+                PendingIntent.getBroadcast(
+                    context,
+                    0,
+                    clickIntent,
+                    0
+                )
+            )
         }
     }
 }
